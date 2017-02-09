@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd"> 
+
+
+	 <context:component-scan base-package="com.swsoft" />
+      <mvc:annotation-driven  validator="validator" conversion-service="conversion-service" />  
+
+  <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass"  value="org.hibernate.validator.HibernateValidator"/>
+        <!--不设置则默认为classpath下的 ValidationMessages.properties--> 
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+  
+    <bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:/resource/config/validatemessages"/>       
+        <property name="fileEncodings" value="utf-8"/>     
+        <!--<property name="cacheSeconds" value="120"/>-->     
+    </bean>
+
+      <mvc:default-servlet-handler />
+  	 <mvc:resources mapping="/js/**" location="/WebRoot/resource/js/" />
+     
+      <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />            
+      <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
+     
+     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+        <!-- <property name="viewClass"><value>org.springframework.web.servlet.view.JstlView</value></property> -->
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+           <bean id="userHelper" class="com.swsoft.service.imp.UserHelper"></bean>
+        <aop:config>
+            <aop:aspect ref="userHelper">
+                <aop:before method="beforeInsert" pointcut="execution(* com.swsoft.service.imp..*.insert(..))"/>
+                <aop:after method="afterInsert" pointcut="execution(* com.swsoft.service.imp..*.insert(..))"/>
+            </aop:aspect>
+       </aop:config>
+       
+       <mvc:interceptors>
+        <mvc:interceptor>
+        <mvc:mapping path="/user/insert"/>
+        <bean class="com.swsoft.interceptor.MyInterceptor"></bean>
+          
+        </mvc:interceptor>
+       </mvc:interceptors>
+ </beans>        

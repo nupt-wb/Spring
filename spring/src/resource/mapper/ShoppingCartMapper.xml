@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+     <mapper namespace="com.swsoft.dao.ShoppingCartMapper">
+   <resultMap type="com.swsoft.entity.returnentity.Commodities" id="shopClass">
+        <result property="id" column="id"></result>
+        <result property="zlbh" column="zlbh"></result>    
+        <result property="spbh" column="spbh"></result>
+        <result property="name" column="name"></result>
+        <result property="price" column="price"></result>
+        <result property="sl" column="sl"></result>   
+        <result property="submitDate" column="submitDate"></result>   
+           
+    </resultMap>
+	    <resultMap type="com.swsoft.entity.returnentity.ShoppingCart" id="shopClass1">
+        <result property="id" column="id"></result>
+        <result property="zlbh" column="zlbh"></result>    
+        <result property="spbh" column="spbh"></result>
+
+        <result property="zj" column="zj"></result>
+        <result property="sl" column="sl"></result>   
+        <result property="submitDate" column="submitDate"></result>   
+           
+    </resultMap>
+    <select id="selectAll" resultMap="shopClass" parameterType="map">
+		  select id,zlbh,spbh,name, price,sl, submitDate from sp where zlbh=#{zlbh}
+	</select>
+	 <select id="selectSingle" resultMap="shopClass" parameterType="map">
+		  select id,zlbh,spbh,name, price,sl, submitDate from sp where spbh=#{spbh}
+	</select>
+	  <select id="selectcart" resultMap="shopClass1" parameterType="map">
+		  select id,zlbh,spbh,sl,zj, submitDate from gwc1 where spbh=#{spbh}
+	</select>
+	 <select id="selectcartall" resultMap="shopClass1" parameterType="map">
+		  select id,zlbh,spbh,sl,zj, submitDate from gwc1 
+	</select>
+	<insert id="insertcart" parameterType="map">
+		INSERT INTO gwc1(id,zlbh,spbh,sl,zj,submitDate) VALUES(#{id},#{zlbh},#{spbh},#{sl},#{zj},now())
+	</insert>
+	<update id="update" parameterType="map">
+		update gwc1 set sl=#{sl},zj=#{zj} where spbh=#{spbh}
+	</update>
+     </mapper>   

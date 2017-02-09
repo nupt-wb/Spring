@@ -1,0 +1,8 @@
+name.not.empty=姓名不能为空
+age.not.inrange=年纪不在范围内
+age.not.empty=年纪不能为空
+email.not.correct=email不正确
+email.not.empty=email不能为空
+tel.not.empty=tel不能为空
+tel.valid=tel最短3位
+name.len=姓名长度最少是3位

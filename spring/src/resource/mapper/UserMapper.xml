@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<!--指向接口 -->
+<mapper namespace="com.swsoft.dao.UserMapper">
+	<!-- sql语句中不能加入分号; -->
+	<!-- 默认返回影响的行数（这个返回类型不需要设置） -->
+	<insert id="insert" parameterType="map">
+		INSERT INTO user(name,age,submitDate) VALUES(#{name},#{age},now())
+	</insert>
+	<update id="update" parameterType="map">
+		update user set age=#{age} where name = #{name}
+	</update>
+	
+	<delete id="delete" parameterType="map">
+		delete from user  where name = #{name}
+	</delete>
+	
+	
+	<resultMap type="java.util.Map" id="userMap">
+    <!-- 
+        property是返回的table的列的别名,在返回的函数中使用这些property
+        column是数据库表的列
+             两者是对应关系
+     -->
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="age" column="age"></result>
+        <result property="submitDate" column="submitDate"></result>        
+    </resultMap>
+    
+	<select  id ="selectByName" resultType="int" parameterType="map">
+	  select count(*) as count  from user where name=#{name}
+	
+	</select>
+	<select  id ="selectAsListMap" resultMap="userMap" parameterType="map">
+	 select id,name,age,submitDate from user where name=#{name}
+	
+	</select>
+	
+	    <resultMap type="com.swsoft.entity.returnentity.User" id="userClass">
+        <result property="i" column="id"></result>
+        <result property="n" column="name"></result>
+        <result property="a" column="age"></result>
+        <result property="s" column="submitDate"></result>   
+    </resultMap>
+	    
+    <select id="selectAsListClass" resultMap="userClass" parameterType="map">
+		  select id, name, age, submitDate from user
+	</select>
+	
+	
+	</mapper>
